@@ -9,3 +9,6 @@ Instructions to run application:
 4. Create topic (kafka-server-start.bat C:\kafka\config\server.properties)
 5. Switch on car_producer (to stream live data into kafka)
 6. Run application
+
+
+![alt text](https://github.com/Denjaa/geo-driving-carf/blob/master/1611314316589.gif)
