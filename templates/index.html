@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+	
+	 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+   
+   <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+	
+    <title>Car Driving around Dublin</title>
+  </head>
+  <body>
+    <h1>Trace location of vehicle</h1>
+
+    <div id="mapid" style = "width:800px; height:580px;"></div>
+    <script type="text/javascript">
+	
+	var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+	
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1IjoiZGVuamFhIiwiYSI6ImNrazZ3NDBsczA4N2YzMnF3ZWZ1dzRybTUifQ.5cQBahxywK_BqRhcxbXs_A'
+	}).addTo(mymap);
+	
+	markerList = [];
+	
+	var eventLondon = new EventSource('/topic/London');
+	
+	eventLondon.addEventListener('listen', function(e) {
+		temporary = JSON.parse(e.data);
+		console.log(temporary.brand);
+		console.log(temporary.latitude);
+		console.log(temporary.longitude);
+		
+		if (temporary.brand == 'audi') {
+			for(var i = 0; i < markerList.length; i++) {
+				mymap.removeLayer(markerList[i]);
+			}
+			marker1 = L.marker([temporary.latitude, temporary.longitude]).addTo(mymap);
+			markerList.push(marker1);
+		}
+	
+	}, false)
+
+  </script>
+	
+  </body>
+</html>
